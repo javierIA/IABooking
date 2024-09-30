@@ -1,0 +1,171 @@
+%% This is the file `kultem.sty',
+%% a non-official KU Leuven template.
+
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{kultem}[2024/01/18 KU Leuven style (v0.2)]
+
+\let\myDate\date
+\newcommand\GoodBye[1][\bfseries]{{#1Good Bye}}
+
+%% PACKAGES
+\RequirePackage{kvoptions}
+\RequirePackage{svg}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+\RequirePackage{tikz}
+\RequirePackage{etoolbox}
+\RequirePackage{enumitem}
+\RequirePackage{geometry}
+\RequirePackage{color}
+\RequirePackage[scaled]{helvet}
+\RequirePackage{sansmath}
+\RequirePackage{caption}
+\RequirePackage{titlesec}
+\RequirePackage{stackengine}
+\RequirePackage{microtype}
+
+%% GENERAL
+\DeclareBoolOption[false]{binding}
+\DeclareBoolOption[false]{sedes}
+\ProcessKeyvalOptions{kultem}\relax
+\usepackage{xcolor}
+\ifkultem@binding
+\edef\kultem@bindingoffset{12mm}
+\else
+\edef\kultem@bindingoffset{0mm}
+\fi
+
+\geometry{%
+a4paper,%
+bindingoffset=\kultem@bindingoffset,%
+left=20mm,%
+right=20mm,%
+top=35mm,%
+bottom=20mm,%
+heightrounded}
+\setlength{\fboxsep}{3pt}
+
+\definecolor{LightBlue}{RGB}{173, 216, 230}
+
+%% OPTIONS
+\newcommand*{\subtitle}[1]{\gdef\@subtitle{#1}}\newcommand*{\@subtitle}{}%
+\newcommand*{\assistant}[1]{\gdef\@assistant{#1}}\newcommand*{\@assistant}{}%
+\newcommand*{\assistants}[1]{\gdef\@assistants{#1}}\newcommand*{\@assistants}{}%
+\newcommand*{\professor}[1]{\gdef\@professor{#1}}\newcommand*{\@professor}{}%
+\newcommand*{\professors}[1]{\gdef\@professors{#1}}\newcommand*{\@professors}{}%
+\newcommand*{\supercom}[1]{\gdef\@supercom{#1}}\newcommand*{\@supercom}{}%
+\newcommand*{\promoter}[1]{\gdef\@promoter{#1}}\newcommand*{\@promoter}{}%
+\newcommand*{\promoters}[1]{\gdef\@promoters{#1}}\newcommand*{\@promoters}{}%
+\newcommand*{\jury}[1]{\gdef\@jury{#1}}\newcommand*{\@jury}{}%
+\newcommand*{\assessors}[1]{\gdef\@assessors{#1}}\newcommand*{\@assessors}{}%
+\newcommand*{\coverimage}[1]{\gdef\@coverimage{#1}}\newcommand*{\@coverimage}{}%
+\newcommand*{\coversvg}[1]{\gdef\@coversvg{#1}}\newcommand*{\@coversvg}{}%
+\newcommand*{\coverinput}[1]{\gdef\@coverinput{#1}}\newcommand*{\@coverinput}{}%
+\def\figurename{\textsc{Figure}}\def\tablename{\textsc{Table}}\setlength\parindent{0pt}
+
+%% KU LEUVEN COLORS
+\definecolor{TechBlue1}{HTML}{0A2540}
+\definecolor{TechBlue2}{HTML}{0C3E72}
+\definecolor{TechBlue3}{HTML}{0F52A0}
+\definecolor{DarkGray}{HTML}{1C1C1C}
+\colorlet{TechLightBlue}{TechBlue3!20!white}
+
+%% TASKS & QUESTIONS
+\newlist{questions}{enumerate}{1}\setlist[questions]{label*=\textbf{\arabic{*}.},ref=\arabic{*}.}
+\makeatletter\newcommand\question[1][]{\if\relax\detokenize{#1}\relax\item\relax\else\protected@edef\@currentlabel{#1}\item[#1:~]\fi}\makeatother
+\newlist{tasks}{enumerate}{1}\setlist[tasks]{label*=\textbf{\roman{*}.},ref=\roman{*}.}
+\makeatletter\newcommand\task[1][]{\if\relax\detokenize{#1}\relax\item\relax\else\protected@edef\@currentlabel{#1}\item[#1:~]\fi}\makeatother
+
+%% FONT
+\sansmath
+\SetSymbolFont{operators}{sans}{OT1}{cmss}{m}{n}
+\SetSymbolFont{letters}{sans}{OML}{cmbrm}{m}{it}
+\SetSymbolFont{symbols}{sans}{OMS}{cmbrs}{m}{n}
+\SetSymbolFont{largesymbols}{sans}{OMX}{iwona}{m}{n}
+\renewcommand{\familydefault}{\sfdefault}
+
+%% HEADERS
+\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
+\usetikzlibrary{calc}
+\makeatletter
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[C]{\begin{tikzpicture}[overlay, remember picture]
+    \fill[TechBlue2] (current page.north west) rectangle ($(current page.north east)+(0,-1in)$);
+    \node[anchor=north west, text=white, font=\Large, minimum size=1in, inner xsep=4mm, align=left] at (current page.north west) {\bf{\MakeUppercase{\@title}}\\\@subtitle};
+    \node[anchor=north east, minimum size=1in, inner xsep=5mm] at (current page.north east) {\includesvg[scale=0.15]{img/vector.svg}};\end{tikzpicture}}
+\fancyfoot[C]{\begin{tikzpicture}[overlay, remember picture]%
+    \fill[TechBlue2] (current page.south west) rectangle ($(current page.south east)+(0,.5in)$);
+    \node[anchor=south west, text=white, minimum size=.5in, inner xsep=5mm, text width=\textwidth-2cm, align=left] 
+        at ($(current page.south west) + (1cm, 0)$) {\leftmark};
+    \node[anchor=south east, text=white, font=\Large, minimum size=.5in, text width=2cm, align=right] 
+        at ($(current page.south east) - (1cm, 0)$) {\thepage};
+\end{tikzpicture}}
+\setlength{\headheight}{13.6pt}
+\makeatother
+
+%% CHAPTER & SECTION
+% Modified to allow text wrapping
+\titleformat{\chapter}[display]
+  {}{
+    \hfill 
+    \tikz[remember picture] \node[text width=0.6\textwidth, align=flush left] (nr) {
+      \bf{\fontsize{20}{70}\selectfont\color{black}\MakeUppercase{\chaptername}~~ \fontsize{60}{70}\selectfont\color{black} \thechapter}
+    };
+    \begin{tikzpicture}[overlay,remember picture]
+      \coordinate (rightborder) at ($(nr.east) + (100,0)$);
+      \coordinate (right) at ($(nr.east) + (0.5,0)$);
+      \draw[line width=4.5em, TechBlue2] (right) -- (rightborder);
+    \end{tikzpicture}
+  }
+  {-1ex}
+  {\filleft\fontsize{30}{50}\selectfont ##1}  % Here, we replace #1 with ##1
+  [\vspace{-1ex}]
+
+\titleformat{\section}[hang]
+  {} % No poner numeración automática
+  {0pt}
+  {\noindent\def\stackalignment{l}\stackunder[0pt]{
+    \colorbox{TechBlue1}{\textcolor{white}{\textbf{\LARGE \MakeUppercase{##1}}}} % Elimina \thesection
+  }
+  {\textcolor{TechBlue2}{\rule{\linewidth}{2pt}}}]
+}
+
+%% BOX
+\newcommand\kulbox[2][3pt]{%
+  \setlength{\fboxsep}{##1}% Set the padding for the box
+  \par\noindent%
+  \begin{center}%
+    \colorbox{LightBlue}{\parbox{\linewidth-2\fboxsep}{##2}}%
+  \end{center}%
+  \setlength{\fboxsep}{3pt}% Reset the padding after use
+}
+
+%% COVER PAGE
+\makeatletter
+\renewcommand\maketitle{%
+\ifkultem@sedes%
+\BgThispage%
+\fi%
+\vfill%
+\begin{flushleft}\vspace*{3cm}{\textbf{\Huge\color{black}\@title}} \\[0.7cm]\ifdefempty{\@subtitle}{}{\textbf{\LARGE\color{gray}\@subtitle}}\end{flushleft}%
+\begin{flushright}\vspace*{1cm}\textbf{\@author\\}\vspace*{1cm}
+\ifdefempty{\@promoter}{}{{\bf\textcolor{gray}{Promoter\\}}\textbf{\@professor\\}\vspace*{1cm}}%
+\ifdefempty{\@promoters}{}{{\bf\textcolor{gray}{Promoters\\}}\textbf{\@professors\\}\vspace*{1cm}}%
+\ifdefempty{\@supercom}{}{{\bf\textcolor{gray}{Supervisory committee\\}}\textbf{\@supercom\\}\vspace*{1cm}}%
+\ifdefempty{\@jury}{}{{\bf\textcolor{gray}{Jury\\}}\textbf{\@jury\\}\vspace*{1cm}}%
+\ifdefempty{\@assessors}{}{{\bf\textcolor{gray}{Assessors\\}}\textbf{\@assessors\\}\vspace*{1cm}}%
+\ifdefempty{\@professor}{}{{\bf\textcolor{gray}{Professor\\}}\textbf{\@professor\\}\vspace*{1cm}}%
+\ifdefempty{\@professors}{}{{\bf\textcolor{gray}{Professors\\}}\textbf{\@professors\\}\vspace*{1cm}}%
+\ifdefempty{\@assistant}{}{{\bf\textcolor{gray}{Assistant\\}}\textbf{\@assistant\\}\vspace*{1cm}}%
+\ifdefempty{\@assistants}{}{{\bf\textcolor{gray}{Assistants\\}}\textbf{\@assistants\\}\vspace*{1cm}}%
+\end{flushright}\vfill%
+\ifdefempty{\@coverimage}{}{\begin{center}\includegraphics[width=0.7\textwidth]{\@coverimage}\end{center}\vfill}%
+\ifdefempty{\@coversvg}{}{\begin{center}\includesvg[width=0.7\textwidth]{\@coversvg}\end{center}\vfill}%
+\ifdefempty{\@coverinput}{}{\begin{center}\input{\@coverinput}\end{center}\vfill}%
+\begin{center}\@date\end{center}%
+}\makeatother
+
+\endinput
+%%
+%% End of file `kultem.sty'.

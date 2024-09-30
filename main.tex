@@ -1,0 +1,51 @@
+\documentclass[a4paper,12pt,oneside]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[sedes]{kultem}
+\usepackage[spanish]{babel}
+\usepackage[document]{ragged2e}
+\usepackage{listings}
+\usepackage{graphicx} % Para insertar imágenes
+\usepackage{hyperref} % Para agregar hipervínculos
+\usepackage{fancyhdr} % Para encabezados y pies de página personalizados
+\usepackage{amsmath} % Para mejoras en las matemáticas
+\usepackage[document]{ragged2e}
+\usepackage{bookmark}
+\usepackage{adjustbox} 
+\usepackage{longtable}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{adjustbox}
+\usepackage{longtable}
+\usepackage{tabularx} % Importa el paquete tabularx
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{booktabs}
+\usepackage{array}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric, arrows}
+
+%% TITLE PAGE OPTIONS (only works with \maketitle is called in the document)
+\title{IA MAQUILADORA}
+\subtitle{Example title}
+\date{\today}
+\author{Javier Flores}
+\professor{IA.center}
+
+%% DOCUMENT
+\begin{document}
+\maketitle
+% Coloca la tabla de contenidos primero
+\tableofcontents 
+
+% Incluir los archivos de índice e introducción
+\input {index}  % Asegúrate de que index.tex exista
+
+\input {intro}  % Asegúrate de que intro.tex exista
+\input{fundamentos}
+\input{ejemplos}
+\end{document}
